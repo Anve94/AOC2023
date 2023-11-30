@@ -3,7 +3,9 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Support\\": "lib/Support/",
+            "Algorithm\\": "lib/Algorithm/"
         }
     },
     "autoload-dev": {
