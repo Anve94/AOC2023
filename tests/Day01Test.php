@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class Day01Test extends TestCase
 {
+    /** PART 1 TEST CASES */
     public function testExampleInputSolvesProblem()
     {
         $filePath = __DIR__ . '/files/01-example.txt';
@@ -42,5 +43,25 @@ class Day01Test extends TestCase
         $data = ['sixsrvldfour4seven'];
         $solution = (new Solution())->solvePart1($data);
         $this->assertEquals(44, $solution);
+    }
+
+    public function testMultipleLines()
+    {
+        $data = [
+            'qijd4as5kljn6ad', // 46
+            'jda0sjdpaso9jdkas1d' // 01?
+        ];
+        $solution = (new Solution())->solvePart1($data);
+        $this->assertEquals(47, $solution);
+    }
+
+    public function testLineHasNoValidValue()
+    {
+        $data = [
+            'djaksldjaklsjd',
+            'ajsdk11lajsdlkasjd'
+        ];
+        $solution = (new Solution())->solvePart1($data);
+        $this->assertEquals(11, $solution);
     }
 }

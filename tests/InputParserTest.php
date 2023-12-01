@@ -23,5 +23,4 @@ class InputParserTest extends TestCase
         $this->expectException('InvalidArgumentException');
         InputParser::parseFileAsArraySplitOnLines($filePath);
     }
-
 }

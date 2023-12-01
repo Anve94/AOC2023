@@ -38,7 +38,7 @@ class Solution extends BaseSolution
 
     public function solvePart2(array $data)
     {
-        return '';
+        return 'Je moeder';
     }
 
     protected function parseInputFile(string $filePath): array

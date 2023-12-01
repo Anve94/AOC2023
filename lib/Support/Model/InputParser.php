@@ -34,5 +34,4 @@ class InputParser implements InputParserInterface
             );
         }
     }
-
 }
