@@ -64,4 +64,37 @@ class Day01Test extends TestCase
         $solution = (new Solution())->solvePart1($data);
         $this->assertEquals(11, $solution);
     }
+
+    /** PART 2 TEST CASES */
+    public function testSingleWordIsFoundOnLine()
+    {
+        $data = ['one'];
+        $solution = (new Solution())->solvePart2($data);
+        $this->assertEquals(11, $solution);
+    }
+
+    public function testOverlappingValuesCanBeParsedCorrectly()
+    {
+        $data = ['eightwo'];
+        $solution = (new Solution())->solvePart2($data);
+        $this->assertEquals(82, $solution);
+    }
+
+    public function testNumericAndWrittenValueCanBeParsedCorrectly()
+    {
+        $data = ['oqwiekasjmdnineasdll;adkas;d1'];
+        $solution = (new Solution())->solvePart2($data);
+        $this->assertEquals(91, $solution);
+    }
+
+    public function testMultipleLinesCanBeParsedCorrectly()
+    {
+        $data = [
+            'oqwiekasjmdnineasdll;adkas;d1', // 91
+            'aksdjaksldjaklsjd12938eight' // 28
+        ];
+
+        $solution = (new Solution())->solvePart2($data);
+        $this->assertEquals(109, $solution);
+    }
 }
