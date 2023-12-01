@@ -21,7 +21,10 @@ class ComposerRunner
         $solutionClass = "\\App\\Day$day\\Solution";
         $solution = new $solutionClass();
         $inputFilePath = __DIR__ . "/../../../src/Day$day/input.txt";
+        $startTime = microtime(true);
         echo($solution->solve($part, $inputFilePath) . PHP_EOL);
+        $execTime = microtime(true) - $startTime;
+        echo(sprintf("Solution found in %s seconds (%s ms)" . PHP_EOL, $execTime, $execTime * 1000));
     }
 
     private static function guardArgumentInput(array $args)
