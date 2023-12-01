@@ -13,5 +13,4 @@ interface InputParserInterface
      * @return string[]
      */
     public static function parseFileAsArraySplitOnLines(string $filePath): array;
-
 }

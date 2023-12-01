@@ -22,7 +22,7 @@ class InputParser implements InputParserInterface
         $data = file_get_contents($filePath);
         return preg_split(self::EOL_REGEX, $data);
     }
-
+    
     private static function validateFileExists(string $filePath): void
     {
         if (!file_exists($filePath)) {
