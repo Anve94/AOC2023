@@ -34,6 +34,7 @@ class Solution extends BaseSolution
     {
         $valuesFondOnLine = [];
 
+        # 2-pointer implementation, left pointer going right until hit and right pointer going left until hit
         foreach ($data as $line) {
             $leftValue = null;
             $rightValue = null;
@@ -58,11 +59,7 @@ class Solution extends BaseSolution
 
     public function solvePart2(array $data)
     {
-        $lineValues = [];
-        foreach ($data as $line) {
-            $lineValues[] = $this->parseLineForTokens($line);
-        }
-        return array_sum($lineValues);
+        return array_sum(array_map([$this, 'parseLineForTokens'], $data));
     }
 
     protected function parseInputFile(string $filePath): array
