@@ -33,17 +33,17 @@ class ComposerRunner
             throw new InvalidArgumentException('Please provide a valid day and part');
         }
 
-        [$day, $part] = [$args[0], (int) $args[1]];
+        [$day, $part] = [$args[0], $args[1]];
 
         if (!is_numeric($day) || !is_numeric($part)) {
             throw new InvalidArgumentException('Please provide a valid day and part');
         }
 
-        if ((int) $day < 0 || (int) $day > 24) {
-            throw new InvalidArgumentException('It\'s called ADVENT of code for a reason... Pick a day 1-24.');
+        if ((int) $day < 0 || (int) $day > 25) {
+            throw new InvalidArgumentException('It\'s called ADVENT of code for a reason... Pick a day 1-25.');
         }
 
-        if ($part !== 1 && $part !== 2) {
+        if ($part !== '1' && $part !== '2') {
             throw new InvalidArgumentException('I know, we really love puzzles. There\'s only two parts though, so pick either 1 or 2');
         }
     }

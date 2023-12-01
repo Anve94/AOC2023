@@ -41,8 +41,13 @@ class Solution extends BaseSolution
             $endPointer = strlen($line) - 1;
 
             for ($i = 0; $i < strlen($line); $i++) {
-                if ($leftValue == null && is_numeric($line[$i])) { $leftValue = $line[$i]; }
-                if ($rightValue == null && is_numeric($line[$endPointer])) { $rightValue = $line[$endPointer]; }
+                if ($leftValue == null && is_numeric($line[$i])) {
+                    $leftValue = $line[$i];
+                }
+
+                if ($rightValue == null && is_numeric($line[$endPointer])) {
+                    $rightValue = $line[$endPointer];
+                }
 
                 if ($leftValue !== null && $rightValue !== null) {
                     break;
@@ -51,7 +56,7 @@ class Solution extends BaseSolution
                 $endPointer--;
             }
 
-            $valuesFondOnLine[] = (int) $leftValue . $rightValue;
+            $valuesFondOnLine[] = (int)$leftValue . $rightValue;
         }
 
         return array_sum($valuesFondOnLine);
@@ -75,7 +80,7 @@ class Solution extends BaseSolution
         $highestIndex = PHP_INT_MIN;
 
         foreach (array_keys(self::TOKEN_VALUE_MAP) as $tokenToLookup) {
-            $tokenToLookup = (string) $tokenToLookup;
+            $tokenToLookup = (string)$tokenToLookup;
 
             $firstHit = strpos($line, $tokenToLookup);
             $lastHit = strrpos($line, $tokenToLookup);
@@ -85,7 +90,7 @@ class Solution extends BaseSolution
                 $leftFound = self::TOKEN_VALUE_MAP[$tokenToLookup];
             }
 
-            if ($lastHit !== false && $lastHit > $highestIndex ) {
+            if ($lastHit !== false && $lastHit > $highestIndex) {
                 $highestIndex = $lastHit;
                 $rightFound = self::TOKEN_VALUE_MAP[$tokenToLookup];
             }
