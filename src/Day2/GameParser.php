@@ -69,7 +69,8 @@ class GameParser
 
     public function getPowerOfHighestColors()
     {
-        $results = [];
+        $totalPower = 0;
+
         foreach ($this->games as $rounds) {
             $highestColors = [
                 'green' => PHP_INT_MIN,
@@ -79,15 +80,13 @@ class GameParser
 
             foreach ($rounds as $round) {
                 foreach ($round as $color => $amount) {
-                    if ($amount > $highestColors[$color]) {
-                        $highestColors[$color] = $amount;
-                    }
+                    $highestColors[$color] = max($amount, $highestColors[$color]);
                 }
             }
 
-            $results[] = array_product($highestColors);
+            $totalPower += array_product($highestColors);
         }
 
-        return array_sum($results);
+        return $totalPower;
     }
 }
