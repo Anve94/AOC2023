@@ -55,10 +55,26 @@ class Day02Test extends TestCase
         $this->assertSame(2, $gameParser->getSumOfPossibleGames());
     }
 
-    public function testWithProvidedSampleInput()
+    public function testPart1WithProvidedSampleData()
     {
         $filePath = __DIR__ . '/files/02-example.txt';
         $solution = (new Solution())->solve(1, $filePath);
         $this->assertEquals(8, $solution);
+    }
+
+    public function testPart2WithSingleLine()
+    {
+        $data = [
+            'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green',
+        ];
+        $powers = (new GameParser($data))->getPowerOfHighestColors();
+        $this->assertEquals(48, $powers);
+    }
+
+    public function testPart2WithSampleInput()
+    {
+        $filePath = __DIR__ . '/files/02-example.txt';
+        $solution = (new Solution())->solve(2, $filePath);
+        $this->assertEquals(2286, $solution);
     }
 }

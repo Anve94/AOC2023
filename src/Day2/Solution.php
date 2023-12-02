@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Day2;
 
+use App\BaseSolution;
 use Support\Model\InputParser;
 
-class Solution extends \App\BaseSolution
+class Solution extends BaseSolution
 {
     protected function parseInputFile(string $filePath): array
     {
@@ -22,6 +23,6 @@ class Solution extends \App\BaseSolution
 
     public function solvePart2(array $data)
     {
-        // TODO: Implement solvePart2() method.
+        return (new GameParser($data))->getPowerOfHighestColors();
     }
 }
