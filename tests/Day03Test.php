@@ -11,23 +11,6 @@ use Support\Model\InputParser;
 
 class Day03Test extends TestCase
 {
-    public function testWhetherPositionsCanBeCheckedForSymbols()
-    {
-        $data = [
-            ['1', '.', '.', '1', '$'],
-            ['2', '5', '$', '2', '3'],
-        ];
-        $solution = new Solution();
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, 0, 0));
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, 0, 3));
-        $this->assertTrue($solution->isSymbolAtNeighbour($data, 0, 4));
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, 0, 99)); // Out of bounds
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, -12, 0)); // Out of bounds
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, 1, 0));
-        $this->assertFalse($solution->isSymbolAtNeighbour($data, 1, 1));
-        $this->assertTrue($solution->isSymbolAtNeighbour($data, 1, 2));
-    }
-
     public function testSingleRowWithNoSymbolsCanBeParsedCorrectly()
     {
         $data = [

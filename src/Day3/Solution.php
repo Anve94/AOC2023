@@ -48,33 +48,25 @@ class Solution extends BaseSolution
 
     public function isPositionPossible($data, $row, $col): bool
     {
-        return (
-            $this->isSymbolAtNeighbour($data, $row - 1, $col - 1) ||
-            $this->isSymbolAtNeighbour($data, $row - 1, $col) ||
-            $this->isSymbolAtNeighbour($data, $row - 1, $col + 1) ||
-            $this->isSymbolAtNeighbour($data, $row, $col - 1) ||
-            $this->isSymbolAtNeighbour($data, $row, $col + 1) ||
-            $this->isSymbolAtNeighbour($data, $row + 1, $col - 1) ||
-            $this->isSymbolAtNeighbour($data, $row + 1, $col) ||
-            $this->isSymbolAtNeighbour($data, $row + 1, $col + 1)
-        );
-    }
+        $neighbors = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1], [1, 0], [1, 1]
+        ];
 
-    public function isSymbolAtNeighbour($data, $row, $col): bool
-    {
-        if (!array_key_exists($row, $data)) {
-            // If position doesn't exist we are at the top/bottom schematic boundary
-            return false; // Evaluate out of bounds as if no symbol is there
+        foreach ($neighbors as [$nr, $nc]) {
+            $neighborRow = $row + $nr;
+            $neighborCol = $col + $nc;
+
+            if (
+                isset($data[$neighborRow][$neighborCol]) &&
+                !(is_numeric($data[$neighborRow][$neighborCol]) || $data[$neighborRow][$neighborCol] === '.')
+            ) {
+                return true;
+            }
         }
 
-        if (!array_key_exists($col, $data[$row])) {
-            // If position doesn't exist we are at the left/right schematic boundary
-            return false;
-        }
-
-        // Position is safe to access
-        $value = $data[$row][$col];
-        return !(is_numeric($value) || $value === '.');
+        return false;
     }
 
     public function solvePart2(array $data)
