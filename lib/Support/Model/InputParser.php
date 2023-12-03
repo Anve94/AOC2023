@@ -27,13 +27,7 @@ class InputParser
     {
         static::validateFileExists($filePath);
 
-        $data = [];
-        $lines = self::parseFileAsArraySplitOnLines($filePath);
-        foreach ($lines as $line) {
-            $data[] = [...str_split($line)];
-        }
-
-        return $data;
+        return array_map('str_split', self::parseFileAsArraySplitOnLines($filePath));
     }
     
     private static function validateFileExists(string $filePath): void
