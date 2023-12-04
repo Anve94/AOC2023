@@ -62,9 +62,7 @@ class Solution extends BaseSolution
             $matchCount = count(array_intersect($card[0], $card[1]));
 
             for ($i = 1; $i <= $matchCount; $i++) {
-                if (isset($copyCounts[$i + $cardNumber])) {
-                    $copyCounts[$i + $cardNumber] += $copyCounts[$cardNumber];
-                }
+                $copyCounts[$i + $cardNumber] += $copyCounts[$cardNumber];
             }
         }
 
