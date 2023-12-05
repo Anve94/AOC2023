@@ -55,29 +55,20 @@ class Solution extends BaseSolution
         $seeds = $data[0];
         $maps = $data[1];
         $finalDestinations = [];
-        $lastNumber = null;
 
         foreach ($seeds as $seedNumber) {
-            $lastNumber = $lastNumber ?? $seedNumber;
+            $lastNumber = $seedNumber;
             foreach ($maps as $map) {
                 foreach ($map as $mapInfo) {
                     [$destination, $source, $range] = [$mapInfo[0], $mapInfo[1], $mapInfo[2]];
-                    if ($lastNumber >= $source && $lastNumber <= $source + $range - 1) {
-                        // When in range, take offset of source and apply to destination
-                        $offset = $lastNumber - $source;
-                        $intermittent = $destination + $offset;
-                        if ($intermittent > $destination + $range - 1) {
-                            $lastNumber = $destination; // Can fall outside of destination range, in which case it's max available
-                        } else {
-                            $lastNumber = $destination + $offset;
-                        }
-
+                    if ($lastNumber >= $source && $lastNumber < $source + $range) {
+                        $offset = $destination - $source;
+                        $lastNumber += $offset;
                         break; // Don't evaluate next maps;
                     }
                 }
             }
             $finalDestinations[] = $lastNumber;
-            $lastNumber = null;
         }
 
         return min($finalDestinations);
