@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class InputParser
 {
-    private const EOL_REGEX = "/\\r\\n|\\r|\\n/";
+    public const EOL_REGEX = "/\\r\\n|\\r|\\n/";
 
     /**
      * Get array where every line in a file is a string representation of the entire line.
