@@ -6,6 +6,8 @@ namespace App\Day5;
 
 use App\BaseSolution;
 use Support\Model\InputParser;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Solution extends BaseSolution
 {
@@ -76,7 +78,33 @@ class Solution extends BaseSolution
 
     public function solvePart2(array $data)
     {
-        // TODO: Implement solvePart2() method.
-    }
+        $seeds = $data[0];
+        $maps = $data[1];
+        $ranges = [];
 
+        for ($i = 0; $i < sizeof($seeds); $i += 2) {
+            [$startRange, $endRange] = [$seeds[$i], $seeds[$i] + $seeds[$i + 1] - 1];
+            $ranges[] = [$startRange, $endRange];
+        }
+
+        for ($destinationNumber = 1; $destinationNumber < 1_000_000_000; $destinationNumber++) {
+            $lastNumber = $destinationNumber;
+            foreach (array_reverse($maps) as $map) {
+                foreach ($map as $mapInfo) {
+                    [$destination, $source, $range] = [$mapInfo[0], $mapInfo[1], $mapInfo[2]];
+                    if ($lastNumber >= $destination && $lastNumber < $destination + $range) {
+                        $offset = $lastNumber - $destination;
+                        $lastNumber = $source + $offset;
+                        break; // Don't evaluate next maps;
+                    }
+                }
+            }
+            foreach ($ranges as $range) {
+                [$start, $end] = [$range[0], $range[1]];
+                if ($lastNumber > $start && $lastNumber < $end) {
+                    return $destinationNumber;
+                }
+            }
+        }
+    }
 }

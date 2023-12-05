@@ -40,4 +40,13 @@ class Day05Test extends TestCase
             (new Solution())->solve(1, $filePath)
         );
     }
+
+    public function testPart2WithSampleInput()
+    {
+        $filePath = __DIR__ . '/files/05-sample.txt';
+        $this->assertEquals(
+            46,
+            (new Solution())->solve(2, $filePath)
+        );
+    }
 }
