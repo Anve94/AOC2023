@@ -6,8 +6,7 @@ namespace App\Day5;
 
 use App\BaseSolution;
 use Support\Model\InputParser;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutput;
+
 
 class Solution extends BaseSolution
 {
@@ -87,24 +86,65 @@ class Solution extends BaseSolution
             $ranges[] = [$startRange, $endRange];
         }
 
-        for ($destinationNumber = 1; $destinationNumber < 1_000_000_000; $destinationNumber++) {
-            $lastNumber = $destinationNumber;
-            foreach (array_reverse($maps) as $map) {
-                foreach ($map as $mapInfo) {
-                    [$destination, $source, $range] = [$mapInfo[0], $mapInfo[1], $mapInfo[2]];
-                    if ($lastNumber >= $destination && $lastNumber < $destination + $range) {
-                        $offset = $lastNumber - $destination;
-                        $lastNumber = $source + $offset;
-                        break; // Don't evaluate next maps;
+        $highestTheoreticalSeed = 0;
+        foreach ($ranges as $range) {
+            if ($range[1] > $highestTheoreticalSeed) { $highestTheoreticalSeed = $range[1]; }
+        }
+
+        $highestTheoreticalSeed = max(array_column($ranges, 1));
+
+        $chunkSize = ceil($highestTheoreticalSeed / 16);
+        $chunkRanges = [];
+        $currentValue = 1;
+        while ($currentValue < $highestTheoreticalSeed) {
+            $chunkRanges[] = [$currentValue, $currentValue + $chunkSize];
+            $currentValue += $chunkSize;
+        }
+
+        $promises = [];
+
+        foreach ($chunkRanges as $chunkRange) {
+            $promises[] = React\Async\async(function ($chunkRange, $maps, $ranges) {
+                $lastNumber = null;
+
+                for ($destinationNumber = $chunkRange[0]; $destinationNumber < $chunkRange[1]; $destinationNumber++) {
+                    if ($lastNumber !== null) {
+                        break; // Value found in another chunk, no need to continue
+                    }
+
+                    foreach (array_reverse($maps) as $map) {
+                        foreach ($map as $mapInfo) {
+                            [$destination, $source, $range] = $mapInfo;
+                            if ($lastNumber >= $destination && $lastNumber < $destination + $range) {
+                                $offset = $lastNumber - $destination;
+                                $lastNumber = $source + $offset;
+                                break; // Don't evaluate next maps;
+                            }
+                        }
+                    }
+
+                    foreach ($ranges as $range) {
+                        [$start, $end] = [$range[0], $range[1]];
+                        if ($lastNumber > $start && $lastNumber < $end) {
+                            echo($destinationNumber);
+                        }
                     }
                 }
-            }
-            foreach ($ranges as $range) {
-                [$start, $end] = [$range[0], $range[1]];
-                if ($lastNumber > $start && $lastNumber < $end) {
-                    return $destinationNumber;
-                }
-            }
+            })();
         }
+
+        \React\Promise\all($promises)->then(
+            function () {
+
+            },
+            function ($results) {
+                // The first resolved promise contains the result
+                echo "Found the correct value: " . $results[0] . PHP_EOL;
+                $found = $results[0];
+            },
+            function ($error) {
+                echo "Error: " . $error->getMessage() . PHP_EOL;
+            }
+        );
     }
 }
