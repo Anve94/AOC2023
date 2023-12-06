@@ -12,50 +12,47 @@ class Solution extends BaseSolution
     public function parseInputFile(string $filePath): array
     {
         $input = InputParser::parseFileAsArraySplitOnLines($filePath);
-        preg_match_all('!\d+!', $input[0], $matches);
-        $times = $matches[0];
-        preg_match_all('!\d+!', $input[1], $matches);
-        $distances = $matches[0];
+        return array_map(null, $this->getDigits($input[0]), $this->getDigits($input[1]));
+    }
 
-        return array_map(null, $times, $distances);
+    private function getDigits(string $input): array
+    {
+        preg_match_all('!\d+!', $input, $matches);
+        return $matches[0];
+    }
+
+    private function calculateBoundaries(int $time, int $distance): array
+    {
+        $leftPointer = 1;
+        $rightPointer = $time - 1;
+        $leftBound = null;
+        $rightBound = null;
+
+        while (($leftPointer <= $rightPointer) && (!isset($leftBound) || !isset($rightBound))) {
+            if (!isset($leftBound) && ($time - $leftPointer) * $leftPointer > $distance) {
+                $leftBound = $leftPointer;
+            }
+
+            if (!isset($rightBound) && ($time - $rightPointer) * $rightPointer > $distance) {
+                $rightBound = $rightPointer;
+            }
+
+            $leftPointer++;
+            $rightPointer--;
+        }
+
+        return [$leftBound, $rightBound];
     }
 
     public function solvePart1(array $data)
     {
-        $ranges = [];
-        foreach ($data as $race) {
-            $time = (int) $race[0];
-            $distance = (int) $race[1];
-            $leftPointer = 1;
-            $rightPointer = $time - 1;
-            $leftBoundFound = false;
-            $rightBoundFound = false;
-            $leftBound = null;
-            $rightBound = null;
-            while ($leftPointer <= $rightPointer) { // Check same middle position with both pointers in case only 1 timing is possible.
-                if (!$leftBoundFound && ($time - $leftPointer) * $leftPointer > $distance ) {
-                    $leftBoundFound = true;
-                    $leftBound = $leftPointer;
-                }
-
-                if (!$rightBoundFound && ($time - $rightPointer) * $rightPointer > $distance) {
-                    $rightBoundFound = true;
-                    $rightBound = $rightPointer;
-                }
-                $leftPointer++;
-                $rightPointer--;
-            }
-            $ranges[] = [$leftBound, $rightBound];
-        }
-
         $total = 1;
-        foreach ($ranges as $range) {
-            $diff = $range[1] - $range[0] + 1; // +1 because inclusive end
-            $total *= $diff;
+        foreach ($data as $race) {
+            [$leftBound, $rightBound] = $this->calculateBoundaries((int) $race[0], (int) $race[1]);
+            $total *= $rightBound - $leftBound + 1;
         }
 
         return $total;
-
     }
 
     public function solvePart2(array $data)
@@ -67,32 +64,7 @@ class Solution extends BaseSolution
             $distances .= $race[1];
         }
 
-        $time = (int) $times;
-        $distance = (int) $distances;
-        $leftPointer = 1;
-        $rightPointer = $time - 1;
-        $leftBoundFound = false;
-        $rightBoundFound = false;
-        $leftBound = null;
-        $rightBound = null;
-        while ($leftPointer <= $rightPointer) { // Check same middle position with both pointers in case only 1 timing is possible.
-            if ($leftBoundFound && $rightBoundFound) {
-                break;
-            }
-
-            if (!$leftBoundFound && ($time - $leftPointer) * $leftPointer > $distance ) {
-                $leftBoundFound = true;
-                $leftBound = $leftPointer;
-            }
-
-            if (!$rightBoundFound && ($time - $rightPointer) * $rightPointer > $distance) {
-                $rightBoundFound = true;
-                $rightBound = $rightPointer;
-            }
-            $leftPointer++;
-            $rightPointer--;
-        }
-
+        [$leftBound, $rightBound] = $this->calculateBoundaries((int) $times, (int) $distances);
         return $rightBound - $leftBound + 1;
     }
 }
