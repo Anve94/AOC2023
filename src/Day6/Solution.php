@@ -44,18 +44,23 @@ class Solution extends BaseSolution
         return [$leftBound, $rightBound];
     }
 
-    public function solvePart1(array $data)
+    public function solvePart1(array $data, $useQuadratic = true)
     {
         $total = 1;
         foreach ($data as $race) {
-            [$leftBound, $rightBound] = $this->calculateBoundaries((int) $race[0], (int) $race[1]);
+            if ($useQuadratic) {
+                [$leftBound, $rightBound] = $this->calculateQuadratic((int) $race[0], (int) $race[1]);
+            } else {
+                [$leftBound, $rightBound] = $this->calculateBoundaries((int) $race[0], (int) $race[1]);
+            }
+
             $total *= $rightBound - $leftBound + 1;
         }
 
         return $total;
     }
 
-    public function solvePart2(array $data)
+    public function solvePart2(array $data, $useQuadratic = true)
     {
         $times = '';
         $distances = '';
@@ -64,7 +69,18 @@ class Solution extends BaseSolution
             $distances .= $race[1];
         }
 
-        [$leftBound, $rightBound] = $this->calculateBoundaries((int) $times, (int) $distances);
+        if ($useQuadratic) {
+            [$leftBound, $rightBound] = $this->calculateQuadratic((int) $times, (int) $distances);
+        } else {
+            [$leftBound, $rightBound] = $this->calculateBoundaries((int) $times, (int) $distances);
+        }
+
         return $rightBound - $leftBound + 1;
+    }
+
+    private function calculateQuadratic(int $time, int $distance) {
+        $high = ($time + pow($time * $time - 4 * $distance - 1, 0.5)) / 2.0;
+        $low = ($time - pow($time * $time - 4 * $distance -1, 0.5)) / 2.0;
+        return [(int) ceil($low), (int) floor($high)];
     }
 }
