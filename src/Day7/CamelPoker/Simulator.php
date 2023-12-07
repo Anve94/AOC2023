@@ -63,8 +63,8 @@ class Simulator
     {
         foreach ($this->handTypes as &$hands) {
             usort($hands, function (Hand $a, Hand $b) {
-                $aCards = str_split($a->getHand());
-                $bCards = str_split($b->getHand());
+                $aCards = str_split($a->getCards());
+                $bCards = str_split($b->getCards());
 
                 $aValues = array_map(function ($card) {
                     return self::HAND_VALUES[$card] ?? 0;

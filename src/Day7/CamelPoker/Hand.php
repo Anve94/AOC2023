@@ -7,16 +7,16 @@ namespace App\Day7\CamelPoker;
 readonly class Hand
 {
     public function __construct(
-        private string $hand,
+        private string $cards,
         private int    $bid
     ) {}
 
     /**
      * @return string
      */
-    public function getHand(): string
+    public function getCards(): string
     {
-        return $this->hand;
+        return $this->cards;
     }
 
     /**
