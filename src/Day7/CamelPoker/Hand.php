@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Day7\CamelPoker;
 
-readonly class Hand
+class Hand
 {
     public function __construct(
-        private string $cards,
-        private int    $bid
+        private readonly string $cards,
+        private readonly int $bid
     ) {}
 
     /**
