@@ -9,7 +9,7 @@ class Node {
     public $left;
     public $right;
 
-    public function __construct(int $data = NULL, ?Node $left = NULL, ?Node $right = NULL) {
+    public function __construct($data = NULL, ?Node $left = NULL, ?Node $right = NULL) {
         $this->data = $data;
         $this->left = $left;
         $this->right = $right;

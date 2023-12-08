@@ -11,7 +11,7 @@ class Tree {
         $this->root = $root;
     }
 
-    public function insert(int $data, string $direction = null) {
+    public function insert($data, string $direction = null) {
         if ($this->root === null) {
             $this->root = new Node($data);
         } else {
@@ -19,7 +19,7 @@ class Tree {
         }
     }
 
-    protected function insertNode(int $data, Node &$node, string $direction = null) {
+    protected function insertNode($data, Node &$node, string $direction = null) {
         if ($direction === 'left') {
             if ($node->left === null) {
                 $node->left = new Node($data);
@@ -49,12 +49,12 @@ class Tree {
         }
     }
 
-    public function findFromRoot(int $data)
+    public function findFromRoot($data)
     {
         return $this->findNode($data, $this->root);
     }
 
-    protected function findNode(int $data, Node $node = null)
+    protected function findNode($data, Node $node = null)
     {
         if ($node === null) {
             return null;
