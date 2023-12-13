@@ -9,6 +9,7 @@ use LogicException;
 class Simulator
 {
     public const HAND_VALUES = [
+        'X' => 1,
         '2' => 2,
         '3' => 3,
         '4' => 4,
@@ -49,22 +50,27 @@ class Simulator
      */
     public function __construct(public array $hands) {}
 
-    public function generateHandTypes(): self
+    public function generateHandTypes($handleJokers = false): self
     {
         foreach ($this->hands as $hand) {
-            $handType = $this->getTypeForHand($hand["cards"]);
+            $handType = $this->getTypeForHand($hand["cards"], $handleJokers);
             $this->handTypes[$handType][] = new Hand($hand["cards"], $hand["bid"]);
         }
 
         return $this;
     }
 
-    public function rankHandTypes(): self
+    public function rankHandTypes(bool $handleJokers = false): self
     {
         foreach ($this->handTypes as &$hands) {
-            usort($hands, function (Hand $a, Hand $b) {
+            usort($hands, function (Hand $a, Hand $b) use ($handleJokers) {
                 $aCards = str_split($a->getCards());
                 $bCards = str_split($b->getCards());
+
+                if ($handleJokers) {
+                    $aCards = str_replace('J', 'X', $aCards);
+                    $bCards = str_replace('J', 'X', $bCards);
+                }
 
                 $aValues = array_map(function ($card) {
                     return self::HAND_VALUES[$card] ?? 0;
@@ -99,10 +105,22 @@ class Simulator
         return $total;
     }
 
-    public function getTypeForHand(string $hand): string
+    public function getTypeForHand(string $hand, bool $handleJokers = false): string
     {
+        if ($hand === 'JJJJJ') {
+            return 'fiveOfAKind';
+        }
         $cards = str_split($hand);
         $countValues = array_count_values($cards);
+
+        $jokerCount = 0;
+        if ($handleJokers && isset($countValues['J'])) {
+            $jokerCount = $countValues['J'];
+            unset($countValues['J']);
+        }
+
+        $highestCard = array_search(max($countValues), $countValues);
+        $countValues[$highestCard] += $jokerCount;
         $countValueSize = sizeof($countValues);
 
         // All values are the same -> 5 of a kind, e.g. AAAAA

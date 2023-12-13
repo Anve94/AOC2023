@@ -154,4 +154,81 @@ class Day07Test extends TestCase
         $simulator->rankHandTypes();
         $this->assertEquals($expected, $simulator->handTypes);
     }
+
+    public function testHandRankingAlgorithmCanHandleJokers()
+    {
+        $simulator = new Simulator([]);
+        $simulator->handTypes = [
+            'highCard' => [new Hand('23456', 10)],
+            'pair' => [
+                new Hand('AA435', 20),
+                new Hand('AA234', 20)
+            ],
+            'twoPair' => [],
+            'threeOfAKind' => [new Hand('AAA34', 30)],
+            'fullHouse' => [],
+            'fourOfAKind' => [
+                new Hand('A44JJ', 40),
+                new Hand('A333J', 40),
+            ],
+            'fiveOfAKind' => [new Hand('AAAAA', 40)]
+        ];
+        $expected = [
+            'fiveOfAKind' => [new Hand('AAAAA', 40)],
+            'highCard' => [new Hand('23456', 10)],
+            'fourOfAKind' => [
+                new Hand('A333J', 40),
+                new Hand('A44JJ', 40),
+            ],
+            'pair' => [
+                new Hand('AA234', 20),
+                new Hand('AA435', 20)
+            ],
+            'fullHouse' => [],
+            'twoPair' => [],
+            'threeOfAKind' => [new Hand('AAA34', 30)],
+        ];
+        $simulator->rankHandTypes(true);
+        $this->assertEquals($expected, $simulator->handTypes);
+    }
+
+    public function testSampleInputWithJokers()
+    {
+        $filePath = __DIR__ . '/files/07-sample.txt';
+        $expected = 5905;
+        $this->assertSame($expected, (new Solution())->solve(2, $filePath));
+    }
+
+    /**
+     * @dataProvider jokerHandsDataProvider
+     */
+    public function testHandTypesWithJokers(string $handType, string $hand)
+    {
+        $this->assertSame(
+            $handType,
+            (new Simulator([]))->getTypeForHand($hand, true)
+        );
+    }
+
+    public static function jokerHandsDataProvider(): array
+    {
+        return [
+            ['fiveOfAKind', 'AAAAA'],
+            ['fiveOfAKind', 'AAAAJ'],
+            ['fiveOfAKind', 'AAAJJ'],
+            ['fiveOfAKind', 'AAJJJ'],
+            ['fiveOfAKind', 'AJJJJ'],
+            ['fiveOfAKind', 'JJJJJ'],
+            ['fourOfAKind', 'AAAA2'],
+            ['fourOfAKind', 'AAAJ2'],
+            ['fourOfAKind', 'AAJJ2'],
+            ['fourOfAKind', 'AJJJ2'],
+            ['fullHouse', 'AAAKK'],
+            ['threeOfAKind', 'AAA23'],
+            ['twoPair', 'AA223'],
+            ['pair', 'AA234'],
+            ['pair', 'AJ234'],
+
+        ];
+    }
 }

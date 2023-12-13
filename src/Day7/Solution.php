@@ -39,7 +39,10 @@ class Solution extends BaseSolution
 
     public function solvePart2(array $data)
     {
-        // TODO: Implement solvePart2() method.
+        return (new Simulator($data))
+            ->generateHandTypes(true)
+            ->rankHandTypes(true)
+            ->calculateResult();
     }
 
 }
