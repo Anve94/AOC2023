@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Support\Model;
 
+use Algorithm\Coordinate\Point;
 use InvalidArgumentException;
 
 class InputParser
@@ -29,7 +30,24 @@ class InputParser
 
         return array_map('str_split', self::parseFileAsArraySplitOnLines($filePath));
     }
-    
+
+    /**
+     * @param string $filePath
+     * @return array<Point[]>
+     */
+    public static function parseAsTwoDimensionalCoordinatesArray(string $filePath): array
+    {
+        $data = self::parseAsTwoDimensionalArray($filePath);
+        $points = [];
+        foreach ($data as $rowIndex => $row) {
+            foreach ($row as $colIndex => $value) {
+                $points[$rowIndex][$colIndex] = new Point($rowIndex, $colIndex, $value);
+            }
+        }
+
+        return $points;
+    }
+
     private static function validateFileExists(string $filePath): void
     {
         if (!file_exists($filePath)) {
